@@ -1,6 +1,7 @@
 package org.eclipse.smarthome.io.rest.internal.filter;
 
 import java.io.IOException;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.List;
 
@@ -48,9 +49,13 @@ public class AuthenticationFilter implements ContainerRequestFilter {
         requestContext.abortWith(unauthorizedStatus);
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     private boolean requestFromSecuredPath() {
+        Class resourceClass = resourceInfo.getResourceClass();
         Method resourceMethod = resourceInfo.getResourceMethod();
-        return resourceMethod.getAnnotation(LoginRequired.class) != null;
+        LoginRequired methodAnnotation = resourceMethod.getAnnotation(LoginRequired.class);
+        Annotation classAnnotation = resourceClass.getAnnotation(LoginRequired.class);
+        return classAnnotation != null || methodAnnotation != null;
     }
 
 }

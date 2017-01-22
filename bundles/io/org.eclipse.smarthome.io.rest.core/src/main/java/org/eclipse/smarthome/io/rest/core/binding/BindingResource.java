@@ -63,6 +63,7 @@ import io.swagger.annotations.ApiResponses;
 @Path(BindingResource.PATH_BINDINGS)
 @RolesAllowed({ Role.ADMIN })
 @Api(value = BindingResource.PATH_BINDINGS)
+@LoginRequired
 public class BindingResource implements SatisfiableRESTResource {
 
     /** The URI path to this resource */
@@ -88,7 +89,6 @@ public class BindingResource implements SatisfiableRESTResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @LoginRequired
     @ApiOperation(value = "Get all bindings.", response = BindingInfoDTO.class, responseContainer = "Set")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 401, message = "Invalid credentials") })
