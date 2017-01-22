@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.FileSystems;
 import java.util.Scanner;
 import java.util.UUID;
 
@@ -15,11 +16,25 @@ public class ConfigurationFileHandler {
     private final static String CFG_FILE_PATH = initializeCFGFilePath();
 
     private static String initializeCFGFilePath() {
-        final String relativePathToCFGFile = "distribution/smarthome/conf/user.cfg";
 
-        String absolutePath = new File("").getAbsolutePath();
+        String[] absolutePath = new File("").getAbsolutePath().split(FileSystems.getDefault().getSeparator());
+        String relativePathToCFGFile = "distribution/smarthome/conf/user.cfg";
 
-        return absolutePath.substring(0, absolutePath.length() - 39).concat(relativePathToCFGFile);
+        for (String s : absolutePath) {
+            System.out.println(s);
+        }
+
+        StringBuilder builder = new StringBuilder();
+
+        for (int i = 0; i < absolutePath.length - 3; i++) {
+            builder.append(absolutePath[i]);
+            builder.append(FileSystems.getDefault().getSeparator());
+        }
+
+        builder.append(relativePathToCFGFile);
+
+        return builder.toString();
+
     }
 
     // e.g. 'user=password,username,uuid'
