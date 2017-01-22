@@ -40,7 +40,7 @@ public class AuthenticationResource implements SatisfiableRESTResource {
     @ApiOperation(value = "Register new account")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 400, message = "Required field is missing"),
-            @ApiResponse(code = 409, message = "User already exists") })
+            @ApiResponse(code = 401, message = "User already exists") })
     public Response register(@ApiParam(value = "Username", required = true) @FormParam("username") String username,
             @ApiParam(value = "Password", required = true) @FormParam("password") String password) {
         if (!requriedFieldIsMissing(username, password)) {
