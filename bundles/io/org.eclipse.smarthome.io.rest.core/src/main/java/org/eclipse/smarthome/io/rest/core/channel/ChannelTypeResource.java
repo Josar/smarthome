@@ -29,6 +29,7 @@ import org.eclipse.smarthome.config.core.dto.ConfigDescriptionDTO;
 import org.eclipse.smarthome.config.core.dto.ConfigDescriptionDTOMapper;
 import org.eclipse.smarthome.config.core.dto.ConfigDescriptionParameterDTO;
 import org.eclipse.smarthome.config.core.dto.ConfigDescriptionParameterGroupDTO;
+import org.eclipse.smarthome.core.auth.LoginRequired;
 import org.eclipse.smarthome.core.auth.Role;
 import org.eclipse.smarthome.core.thing.dto.ChannelTypeDTO;
 import org.eclipse.smarthome.core.thing.type.ChannelType;
@@ -51,6 +52,7 @@ import io.swagger.annotations.ApiResponses;
 @Path(ChannelTypeResource.PATH_CHANNEL_TYPES)
 @RolesAllowed({ Role.ADMIN })
 @Api(value = ChannelTypeResource.PATH_CHANNEL_TYPES)
+@LoginRequired
 public class ChannelTypeResource implements SatisfiableRESTResource {
 
     /** The URI path to this resource */

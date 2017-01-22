@@ -10,10 +10,12 @@ import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.Provider;
 
 import org.eclipse.smarthome.core.auth.JWTAuthenticationService;
 import org.eclipse.smarthome.core.auth.LoginRequired;
+import org.eclipse.smarthome.io.rest.JSONResponse;
 
 /**
  *
@@ -44,9 +46,8 @@ public class AuthenticationFilter implements ContainerRequestFilter {
     }
 
     private void abortWithUnauthorizedStatus(ContainerRequestContext requestContext) {
-        Response unauthorizedStatus = Response.status(Response.Status.UNAUTHORIZED).entity("Invalid user credentials")
-                .build();
-        requestContext.abortWith(unauthorizedStatus);
+        Response response = JSONResponse.createErrorResponse(Status.UNAUTHORIZED, "Invalid user credentials");
+        requestContext.abortWith(response);
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
