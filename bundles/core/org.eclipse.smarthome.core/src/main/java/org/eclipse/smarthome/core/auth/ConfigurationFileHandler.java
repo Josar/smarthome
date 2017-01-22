@@ -18,7 +18,7 @@ public class ConfigurationFileHandler {
     private static String initializeCFGFilePath() {
 
         String[] absolutePath = new File("").getAbsolutePath().split(FileSystems.getDefault().getSeparator());
-        String relativePathToCFGFile = "distribution/smarthome/conf/user.cfg";
+        String relativePathToCFGFile = "smarthome/distribution/smarthome/conf/user.cfg";
 
         StringBuilder builder = new StringBuilder();
 
@@ -206,9 +206,5 @@ public class ConfigurationFileHandler {
 
             throw new InternalServerErrorException();
         }
-    }
-
-    public static void main(String[] args) {
-        register(new UsernamePasswordCredentials("amir", "amir_password"));
     }
 }

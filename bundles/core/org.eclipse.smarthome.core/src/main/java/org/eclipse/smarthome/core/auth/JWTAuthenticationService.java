@@ -12,8 +12,7 @@ public class JWTAuthenticationService {
     private static String key = "beduinokey";
 
     public static void register(UsernamePasswordCredentials credentials) throws AuthenticationException {
-        // ConfigurationFileHandler.register(credentials);
-        ConfigurationFileHandler.main(null);
+        ConfigurationFileHandler.register(credentials);
     }
 
     public static String getToken(UsernamePasswordCredentials credentials) throws AuthenticationException {
