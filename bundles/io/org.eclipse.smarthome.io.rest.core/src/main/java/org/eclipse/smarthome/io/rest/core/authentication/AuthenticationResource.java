@@ -1,8 +1,5 @@
 package org.eclipse.smarthome.io.rest.core.authentication;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -12,7 +9,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.eclipse.smarthome.core.auth.AuthenticationException;
-import org.eclipse.smarthome.core.auth.JWTAuthenticationService;
 import org.eclipse.smarthome.core.auth.UsernamePasswordCredentials;
 import org.eclipse.smarthome.io.rest.JSONResponse;
 import org.eclipse.smarthome.io.rest.SatisfiableRESTResource;
@@ -68,10 +64,10 @@ public class AuthenticationResource implements SatisfiableRESTResource {
         if (!requriedFieldIsMissing(username, password)) {
             UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(username, password);
             try {
-                String token = JWTAuthenticationService.getToken(credentials);
-                Map<String, String> json = new HashMap<String, String>();
-                json.put("key", token);
-                return Response.ok(json).build();
+                // String token = JWTAuthenticationService.getToken(credentials);
+                // Map<String, String> json = new HashMap<String, String>();
+                // json.put("key", token);
+                // return Response.ok(json).build();
             } catch (AuthenticationException e) {
                 return JSONResponse.createErrorResponse(Status.UNAUTHORIZED, e.getMessage());
             }
