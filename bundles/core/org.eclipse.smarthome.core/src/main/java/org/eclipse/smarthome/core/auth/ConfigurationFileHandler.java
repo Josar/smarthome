@@ -20,10 +20,6 @@ public class ConfigurationFileHandler {
         String[] absolutePath = new File("").getAbsolutePath().split(FileSystems.getDefault().getSeparator());
         String relativePathToCFGFile = "distribution/smarthome/conf/user.cfg";
 
-        for (String s : absolutePath) {
-            System.out.println(s);
-        }
-
         StringBuilder builder = new StringBuilder();
 
         for (int i = 0; i < absolutePath.length - 3; i++) {
