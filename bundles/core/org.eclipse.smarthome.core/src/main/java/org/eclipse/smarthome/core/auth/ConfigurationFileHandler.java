@@ -56,7 +56,7 @@ public class ConfigurationFileHandler {
 
             // TODO: log the Error.
 
-            throw new AuthenticationException("Invalid");
+            throw new AuthenticationException("User already exists");
         }
 
         UUID uuid = UUID.randomUUID();
@@ -106,7 +106,7 @@ public class ConfigurationFileHandler {
 
             // TODO: log the Error.
 
-            throw new AuthenticationException("Invalid");
+            throw new AuthenticationException("Invalid user credentials");
         }
 
         return UUID.fromString(userData[UUID_LOCATION]);
