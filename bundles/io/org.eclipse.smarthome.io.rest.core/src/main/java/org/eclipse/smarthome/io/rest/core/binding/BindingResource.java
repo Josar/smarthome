@@ -34,6 +34,7 @@ import org.eclipse.smarthome.config.core.ConfigDescription;
 import org.eclipse.smarthome.config.core.ConfigDescriptionRegistry;
 import org.eclipse.smarthome.config.core.ConfigUtil;
 import org.eclipse.smarthome.config.core.Configuration;
+import org.eclipse.smarthome.core.auth.LoginRequired;
 import org.eclipse.smarthome.core.auth.Role;
 import org.eclipse.smarthome.core.binding.BindingInfo;
 import org.eclipse.smarthome.core.binding.BindingInfoRegistry;
@@ -87,6 +88,7 @@ public class BindingResource implements SatisfiableRESTResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @LoginRequired
     @ApiOperation(value = "Get all bindings.", response = BindingInfoDTO.class, responseContainer = "Set")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 401, message = "Invalid credentials") })

@@ -1,14 +1,18 @@
 package org.eclipse.smarthome.io.rest.internal.filter;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.List;
 
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
+import javax.ws.rs.container.ResourceInfo;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
 import org.eclipse.smarthome.core.auth.JWTAuthenticationService;
+import org.eclipse.smarthome.core.auth.LoginRequired;
 
 /**
  *
@@ -18,13 +22,14 @@ import org.eclipse.smarthome.core.auth.JWTAuthenticationService;
 @Provider
 public class AuthenticationFilter implements ContainerRequestFilter {
 
-    private static final String AUTHORIZATION_HEADER = "Authorization";
+    @Context
+    ResourceInfo resourceInfo;
 
-    private final String[] unsecuredPahts = { "swagger.json", "login", "register" };
+    private static final String AUTHORIZATION_HEADER = "Authorization";
 
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
-        if (requestFromSecuredPath(requestContext)) {
+        if (requestFromSecuredPath()) {
             List<String> authHeader = requestContext.getHeaders().get(AUTHORIZATION_HEADER);
             if (authHeader != null && authHeader.size() > 0) {
                 String authToken = authHeader.get(0);
@@ -43,13 +48,9 @@ public class AuthenticationFilter implements ContainerRequestFilter {
         requestContext.abortWith(unauthorizedStatus);
     }
 
-    private boolean requestFromSecuredPath(ContainerRequestContext requestContext) {
-        for (String path : unsecuredPahts) {
-            if (requestContext.getUriInfo().getPath().contains(path)) {
-                return false;
-            }
-        }
-        return true;
+    private boolean requestFromSecuredPath() {
+        Method resourceMethod = resourceInfo.getResourceMethod();
+        return resourceMethod.getAnnotation(LoginRequired.class) != null;
     }
 
 }
