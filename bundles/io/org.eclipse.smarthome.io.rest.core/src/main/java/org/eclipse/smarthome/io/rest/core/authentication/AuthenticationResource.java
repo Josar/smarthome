@@ -1,5 +1,8 @@
 package org.eclipse.smarthome.io.rest.core.authentication;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -9,6 +12,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.eclipse.smarthome.core.auth.AuthenticationException;
+import org.eclipse.smarthome.core.auth.JWTAuthenticationService;
 import org.eclipse.smarthome.core.auth.UsernamePasswordCredentials;
 import org.eclipse.smarthome.io.rest.JSONResponse;
 import org.eclipse.smarthome.io.rest.SatisfiableRESTResource;
@@ -57,17 +61,19 @@ public class AuthenticationResource implements SatisfiableRESTResource {
     @ApiOperation(value = "Get JSON Web Token (JWT)")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 400, message = "Required field is missing"),
-            @ApiResponse(code = 401, message = "Invalid Credentials") })
+            @ApiResponse(code = 401, message = "Invalid credentials") })
     public Response login(@ApiParam(value = "Username", required = true) @FormParam("username") String username,
             @ApiParam(value = "Password", required = true) @FormParam("password") String password) {
 
+        // JWTAuthenticationService.authenticate(
+        // "eyJhbGciOiJIUzUxMiJ9.eyJuYW1lIjoiYW1pciJ9.-oAc68PBtr4dwBI-Z5K80kRWq2aCxyp1Fnksc72-Czds30iczZYFR63kK15PFnNbKeZRBQsbDufQ7juTHvUEeQ");
         if (!requriedFieldIsMissing(username, password)) {
             UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(username, password);
             try {
-                // String token = JWTAuthenticationService.getToken(credentials);
-                // Map<String, String> json = new HashMap<String, String>();
-                // json.put("key", token);
-                // return Response.ok(json).build();
+                String token = JWTAuthenticationService.getToken(credentials);
+                Map<String, String> json = new HashMap<String, String>();
+                json.put("key", token);
+                return Response.ok(json).build();
             } catch (AuthenticationException e) {
                 return JSONResponse.createErrorResponse(Status.UNAUTHORIZED, e.getMessage());
             }

@@ -4,9 +4,9 @@
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" output="target/classes" path="src/main/java"/>
 	<classpathentry kind="lib" path="lib/jackson-annotations-2.8.0.jar"/>
-        <classpathentry kind="lib" path="lib/jackson-core-2.8.2.jar"/>
-        <classpathentry kind="lib" path="lib/jackson-databind-2.8.2.jar"/>
-        <classpathentry kind="lib" path="lib/jjwt-0.7.0.jar"/>
+	<classpathentry kind="lib" path="lib/jackson-core-2.8.2.jar"/>
+	<classpathentry kind="lib" path="lib/jackson-databind-2.8.2.jar"/>
+	<classpathentry kind="lib" path="lib/jjwt-0.7.0.jar" sourcepath="/Users/amir/.m2/repository/io/jsonwebtoken/jjwt/0.7.0/jjwt-0.7.0-sources.jar"/>
 	<classpathentry excluding="**" kind="src" output="target/classes" path="src/main/resources"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
