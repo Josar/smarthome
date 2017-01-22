@@ -46,7 +46,7 @@ public class AuthenticationResource implements SatisfiableRESTResource {
         if (!requriedFieldIsMissing(username, password)) {
             UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(username, password);
             try {
-                // JWTAuthenticationService.register(credentials);
+                JWTAuthenticationService.register(credentials);
                 return Response.ok().build();
             } catch (AuthenticationException e) {
                 return JSONResponse.createErrorResponse(Status.UNAUTHORIZED, e.getMessage());
