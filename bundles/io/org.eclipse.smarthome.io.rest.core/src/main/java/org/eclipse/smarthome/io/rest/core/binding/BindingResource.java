@@ -92,8 +92,9 @@ public class BindingResource implements SatisfiableRESTResource {
     @ApiOperation(value = "Get all bindings.", response = BindingInfoDTO.class, responseContainer = "Set")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 401, message = "Invalid credentials") })
-    public Response getAll(@HeaderParam(HttpHeaders.ACCEPT_LANGUAGE) @ApiParam(value = "language") String language,
-            @HeaderParam(HttpHeaders.AUTHORIZATION) @ApiParam(value = "Authorization Header", required = true) String authorizationHeader) {
+    public Response getAll(
+            @HeaderParam(HttpHeaders.AUTHORIZATION) @ApiParam(value = "Authorization Header", required = true) String authorizationHeader,
+            @HeaderParam(HttpHeaders.ACCEPT_LANGUAGE) @ApiParam(value = "language") String language) {
         if (!JWTAuthenticationService.authenticate(authorizationHeader)) {
             return JSONResponse.createErrorResponse(Status.UNAUTHORIZED, "Invalid credentials");
         }
