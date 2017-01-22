@@ -34,12 +34,10 @@ import org.eclipse.smarthome.config.core.ConfigDescription;
 import org.eclipse.smarthome.config.core.ConfigDescriptionRegistry;
 import org.eclipse.smarthome.config.core.ConfigUtil;
 import org.eclipse.smarthome.config.core.Configuration;
-import org.eclipse.smarthome.core.auth.JWTAuthenticationService;
 import org.eclipse.smarthome.core.auth.Role;
 import org.eclipse.smarthome.core.binding.BindingInfo;
 import org.eclipse.smarthome.core.binding.BindingInfoRegistry;
 import org.eclipse.smarthome.core.binding.dto.BindingInfoDTO;
-import org.eclipse.smarthome.io.rest.JSONResponse;
 import org.eclipse.smarthome.io.rest.LocaleUtil;
 import org.eclipse.smarthome.io.rest.SatisfiableRESTResource;
 import org.eclipse.smarthome.io.rest.core.config.ConfigurationService;
@@ -92,12 +90,7 @@ public class BindingResource implements SatisfiableRESTResource {
     @ApiOperation(value = "Get all bindings.", response = BindingInfoDTO.class, responseContainer = "Set")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 401, message = "Invalid credentials") })
-    public Response getAll(
-            @HeaderParam(HttpHeaders.AUTHORIZATION) @ApiParam(value = "Authorization Header", required = true) String authorizationHeader,
-            @HeaderParam(HttpHeaders.ACCEPT_LANGUAGE) @ApiParam(value = "language") String language) {
-        if (!JWTAuthenticationService.authenticate(authorizationHeader)) {
-            return JSONResponse.createErrorResponse(Status.UNAUTHORIZED, "Invalid credentials");
-        }
+    public Response getAll(@HeaderParam(HttpHeaders.ACCEPT_LANGUAGE) @ApiParam(value = "language") String language) {
         final Locale locale = LocaleUtil.getLocale(language);
 
         Set<BindingInfo> bindingInfos = bindingInfoRegistry.getBindingInfos(locale);

@@ -8,8 +8,19 @@ import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
+/**
+ * Use this jwt-token
+ * eyJhbGciOiJIUzUxMiJ9.eyJuYW1lIjoiYW1pciJ9.-oAc68PBtr4dwBI-Z5K80kRWq2aCxyp1Fnksc72-Czds30iczZYFR63kK15PFnNbKeZRBQsbDufQ7juTHvUEeQ
+ * for debugging
+ *
+ * @author Mohamadreza Amir Khostevan
+ *
+ */
 public class JWTAuthenticationService {
+
     private static String key = "beduinokey";
+
+    private static final String AUTHORIZATION_HEADER_PREFIX = "Bearer ";
 
     public static void register(UsernamePasswordCredentials credentials) throws AuthenticationException {
         ConfigurationFileHandler.register(credentials);
@@ -27,7 +38,7 @@ public class JWTAuthenticationService {
 
     public static boolean authenticate(String authorizationHeader) {
         try {
-            String token = authorizationHeader.substring("Bearer".length()).trim();
+            String token = authorizationHeader.replaceFirst(AUTHORIZATION_HEADER_PREFIX, "");
             String base64Key = Base64.encodeBase64String(key.getBytes());
             Jwts.parser().setSigningKey(base64Key).parseClaimsJws(token).getBody();
             return true;
