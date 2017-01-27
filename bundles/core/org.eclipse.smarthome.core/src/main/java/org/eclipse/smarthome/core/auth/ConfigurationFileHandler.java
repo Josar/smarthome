@@ -50,7 +50,7 @@ public class ConfigurationFileHandler {
     public static void register(final UsernamePasswordCredentials credentials) {
 
         final String username = credentials.getUsername();
-        final String password = credentials.getPassword();
+        final String hashed_password = BCrypt.hashpw(credentials.getPassword(), BCrypt.gensalt());
 
         if (usernameExists(username)) {
 
@@ -68,7 +68,7 @@ public class ConfigurationFileHandler {
         final BufferedWriter bufferedWriter = cfgFileBufferedWriterFactory();
 
         try {
-            bufferedWriter.write(String.format("user=%s,%s,%s", password, username, uuid));
+            bufferedWriter.write(String.format("user=%s,%s,%s", hashed_password, username, uuid));
 
             bufferedWriter.newLine();
         } catch (IOException e) {
@@ -102,7 +102,7 @@ public class ConfigurationFileHandler {
 
         final String[] userData = searchCfgFile(username, USERNAME_LOCATION);
 
-        if (userData == null || !userData[PASSWORD_LOCATION].equals(password)) {
+        if (userData == null || !BCrypt.checkpw(password, userData[PASSWORD_LOCATION])) {
 
             // TODO: log the Error.
 
