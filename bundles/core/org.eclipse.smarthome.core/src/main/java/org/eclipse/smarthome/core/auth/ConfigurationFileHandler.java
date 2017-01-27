@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.FileSystems;
 import java.util.Scanner;
 import java.util.UUID;
 
@@ -17,19 +16,9 @@ public class ConfigurationFileHandler {
 
     private static String initializeCFGFilePath() {
 
-        final String[] absolutePath = new File("").getAbsolutePath().split(FileSystems.getDefault().getSeparator());
-        final String relativePathToCFGFile = "smarthome/distribution/smarthome/conf/user.cfg";
+        String[] array = { "smarthome", "distribution", "smarthome", "conf", "user.cfg" };
 
-        StringBuilder builder = new StringBuilder();
-
-        for (int i = 0; i < absolutePath.length - 3; i++) {
-            builder.append(absolutePath[i]);
-            builder.append(FileSystems.getDefault().getSeparator());
-        }
-
-        builder.append(relativePathToCFGFile);
-
-        return builder.toString();
+        return PathTools.getPathFromFileComponents(array);
 
     }
 
