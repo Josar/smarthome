@@ -17,8 +17,8 @@ public class ConfigurationFileHandler {
 
     private static String initializeCFGFilePath() {
 
-        String[] absolutePath = new File("").getAbsolutePath().split(FileSystems.getDefault().getSeparator());
-        String relativePathToCFGFile = "smarthome/distribution/smarthome/conf/user.cfg";
+        final String[] absolutePath = new File("").getAbsolutePath().split(FileSystems.getDefault().getSeparator());
+        final String relativePathToCFGFile = "smarthome/distribution/smarthome/conf/user.cfg";
 
         StringBuilder builder = new StringBuilder();
 
@@ -182,9 +182,15 @@ public class ConfigurationFileHandler {
     private static Scanner cfgFileScannerFactory() {
 
         try {
-            return new Scanner(new File(CFG_FILE_PATH));
+            File userCfg = new File(CFG_FILE_PATH);
+            userCfg.createNewFile();
+            return new Scanner(userCfg);
         } catch (FileNotFoundException e) {
 
+            // TODO: log the Error.
+
+            throw new InternalServerErrorException();
+        } catch (IOException e) {
             // TODO: log the Error.
 
             throw new InternalServerErrorException();
