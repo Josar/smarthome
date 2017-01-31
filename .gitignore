@@ -20,4 +20,5 @@ bundles/storage/org.eclipse.smarthome.storage.mapdb.test/userdata/mapdb/storage.
 bundles/storage/org.eclipse.smarthome.storage.mapdb.test/userdata/mapdb/storage.mapdb.p
 bundles/storage/org.eclipse.smarthome.storage.mapdb.test/userdata/mapdb/storage.mapdb.t
 features/karaf/*/src/main/history
-user.cfg
+distribution/smarthome/conf/user.cfg
+distribution/smarthome/conf/jwt_key.key
