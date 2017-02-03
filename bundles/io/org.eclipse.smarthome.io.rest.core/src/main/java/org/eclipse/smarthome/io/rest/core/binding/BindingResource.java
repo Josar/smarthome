@@ -34,7 +34,6 @@ import org.eclipse.smarthome.config.core.ConfigDescription;
 import org.eclipse.smarthome.config.core.ConfigDescriptionRegistry;
 import org.eclipse.smarthome.config.core.ConfigUtil;
 import org.eclipse.smarthome.config.core.Configuration;
-import org.eclipse.smarthome.core.auth.LoginRequired;
 import org.eclipse.smarthome.core.auth.Role;
 import org.eclipse.smarthome.core.binding.BindingInfo;
 import org.eclipse.smarthome.core.binding.BindingInfoRegistry;
@@ -63,7 +62,6 @@ import io.swagger.annotations.ApiResponses;
 @Path(BindingResource.PATH_BINDINGS)
 @RolesAllowed({ Role.ADMIN })
 @Api(value = BindingResource.PATH_BINDINGS)
-@LoginRequired
 public class BindingResource implements SatisfiableRESTResource {
 
     /** The URI path to this resource */

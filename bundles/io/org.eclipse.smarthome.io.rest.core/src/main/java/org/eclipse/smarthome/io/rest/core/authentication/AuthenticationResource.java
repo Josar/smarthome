@@ -8,11 +8,13 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.eclipse.smarthome.core.auth.AuthenticationException;
 import org.eclipse.smarthome.core.auth.JWTAuthenticationService;
+import org.eclipse.smarthome.core.auth.NoAuthenticationRequired;
 import org.eclipse.smarthome.core.auth.UsernamePasswordCredentials;
 import org.eclipse.smarthome.io.rest.JSONResponse;
 import org.eclipse.smarthome.io.rest.SatisfiableRESTResource;
@@ -27,6 +29,7 @@ import io.swagger.annotations.ApiResponses;
  * @author Mohamadreza Amir Khostevan
  * @author Sven Höper
  */
+@NoAuthenticationRequired
 @Path(AuthenticationResource.PATH_AUTHENTICATION)
 @Api(value = AuthenticationResource.PATH_AUTHENTICATION)
 public class AuthenticationResource implements SatisfiableRESTResource {
@@ -73,7 +76,8 @@ public class AuthenticationResource implements SatisfiableRESTResource {
                 String token = JWTAuthenticationService.getToken(credentials);
                 Map<String, String> json = new HashMap<String, String>();
                 json.put("key", token);
-                return Response.ok(json).build();
+                return Response.ok(json).cookie(new NewCookie("key", token, "/", "", "", 60 * 60 * 24 * 356, false))
+                        .build();
             } catch (AuthenticationException e) {
                 return JSONResponse.createErrorResponse(Status.UNAUTHORIZED, e.getMessage());
             }
