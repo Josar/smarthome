@@ -4,18 +4,22 @@ import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Map;
 
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.Provider;
 
 import org.eclipse.smarthome.core.auth.JWTAuthenticationService;
-import org.eclipse.smarthome.core.auth.LoginRequired;
+import org.eclipse.smarthome.core.auth.NoAuthenticationRequired;
 import org.eclipse.smarthome.io.rest.JSONResponse;
+
+import io.swagger.jaxrs.listing.ApiListingResource;
 
 /**
  *
@@ -33,16 +37,29 @@ public class AuthenticationFilter implements ContainerRequestFilter {
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
         if (requestFromSecuredPath()) {
-            List<String> authHeader = requestContext.getHeaders().get(AUTHORIZATION_HEADER);
-            if (authHeader != null && authHeader.size() > 0) {
-                String authToken = authHeader.get(0);
-                if (!JWTAuthenticationService.authenticate(authToken)) {
+            if (!authenticatedWithCookie(requestContext)) {
+                List<String> authHeader = requestContext.getHeaders().get(AUTHORIZATION_HEADER);
+                if (authHeader != null && authHeader.size() > 0) {
+                    String authToken = authHeader.get(0);
+                    if (!JWTAuthenticationService.authenticate(authToken)) {
+                        abortWithUnauthorizedStatus(requestContext);
+                    }
+                } else {
                     abortWithUnauthorizedStatus(requestContext);
                 }
-            } else {
-                abortWithUnauthorizedStatus(requestContext);
             }
         }
+    }
+
+    private boolean authenticatedWithCookie(ContainerRequestContext requestContext) {
+        Map<String, Cookie> cookies = requestContext.getCookies();
+        if (requestContext.getCookies().containsKey("key")) {
+            Cookie jwtCookie = requestContext.getCookies().get("key");
+            if (JWTAuthenticationService.authenticate(jwtCookie.getValue())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void abortWithUnauthorizedStatus(ContainerRequestContext requestContext) {
@@ -54,9 +71,12 @@ public class AuthenticationFilter implements ContainerRequestFilter {
     private boolean requestFromSecuredPath() {
         Class resourceClass = resourceInfo.getResourceClass();
         Method resourceMethod = resourceInfo.getResourceMethod();
-        LoginRequired methodAnnotation = resourceMethod.getAnnotation(LoginRequired.class);
-        Annotation classAnnotation = resourceClass.getAnnotation(LoginRequired.class);
-        return classAnnotation != null || methodAnnotation != null;
+        if (resourceClass == ApiListingResource.class) {
+            return false;
+        }
+        NoAuthenticationRequired methodAnnotation = resourceMethod.getAnnotation(NoAuthenticationRequired.class);
+        Annotation classAnnotation = resourceClass.getAnnotation(NoAuthenticationRequired.class);
+        return classAnnotation == null && methodAnnotation == null;
     }
 
 }

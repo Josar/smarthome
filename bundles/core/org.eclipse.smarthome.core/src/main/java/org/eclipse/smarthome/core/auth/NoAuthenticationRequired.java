@@ -14,5 +14,5 @@ import java.lang.annotation.Target;
 
 @Retention(RUNTIME)
 @Target({ TYPE, METHOD })
-public @interface LoginRequired {
+public @interface NoAuthenticationRequired {
 }
