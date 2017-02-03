@@ -26,7 +26,7 @@ public class JWTAuthenticationService {
 
     private static byte[] key = initializeKey();
 
-    private static int KEY_LENGTH = 128;
+    private static int KEY_LENGTH = 10;
 
     private static final String AUTHORIZATION_HEADER_PREFIX = "Bearer ";
 
@@ -70,7 +70,8 @@ public class JWTAuthenticationService {
 
         byte[] bytes = new byte[KEY_LENGTH];
 
-        new SecureRandom().nextBytes(bytes);
+        SecureRandom random = new SecureRandom();
+        random.nextBytes(bytes);
 
         try {
             FileOutputStream fileOuputStream = new FileOutputStream(file);
