@@ -2,7 +2,6 @@ package org.eclipse.smarthome.core.auth;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Scanner;
 import java.util.UUID;
@@ -26,9 +25,9 @@ import io.jsonwebtoken.SignatureAlgorithm;
  */
 public class JWTAuthenticationService {
 
-    private static byte[] key = initializeKey();
+    private static int KEY_LENGTH = 128;
 
-    private static int KEY_LENGTH = 10;
+    private static byte[] key = initializeKey();
 
     private static final String AUTHORIZATION_HEADER_PREFIX = "Bearer ";
 
@@ -73,18 +72,9 @@ public class JWTAuthenticationService {
         byte[] bytes = new byte[KEY_LENGTH];
 
         try {
+            SecureRandom secureRandom = SecureRandom.getInstance("SHA1PRNG");
+            secureRandom.nextBytes(bytes);
 
-            // Create a secure random number generator using the SHA1PRNG algorithm
-            SecureRandom secureRandomGenerator = SecureRandom.getInstance("SHA1PRNG");
-            // Get 128 random bytes
-            byte[] randomBytes = new byte[128];
-            secureRandomGenerator.nextBytes(randomBytes);
-            System.out.println("asda");
-
-        } catch (NoSuchAlgorithmException e) {
-        }
-
-        try {
             FileOutputStream fileOuputStream = new FileOutputStream(file);
 
             try {
