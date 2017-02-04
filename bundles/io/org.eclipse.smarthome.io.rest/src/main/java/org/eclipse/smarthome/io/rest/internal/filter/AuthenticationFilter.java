@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.List;
-import java.util.Map;
 
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
@@ -33,6 +32,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
     ResourceInfo resourceInfo;
 
     private static final String AUTHORIZATION_HEADER = "Authorization";
+    private final String SWAGGER_OVERVIEW_PATH_STRING = "/doc/index.html";
 
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
@@ -52,8 +52,9 @@ public class AuthenticationFilter implements ContainerRequestFilter {
     }
 
     private boolean authenticatedWithCookie(ContainerRequestContext requestContext) {
-        Map<String, Cookie> cookies = requestContext.getCookies();
-        if (requestContext.getCookies().containsKey("key")) {
+        boolean requestIsFromSwaggerOverview = requestContext.getHeaderString("referer")
+                .contains(SWAGGER_OVERVIEW_PATH_STRING);
+        if (requestIsFromSwaggerOverview && requestContext.getCookies().containsKey("key")) {
             Cookie jwtCookie = requestContext.getCookies().get("key");
             if (JWTAuthenticationService.authenticate(jwtCookie.getValue())) {
                 return true;
