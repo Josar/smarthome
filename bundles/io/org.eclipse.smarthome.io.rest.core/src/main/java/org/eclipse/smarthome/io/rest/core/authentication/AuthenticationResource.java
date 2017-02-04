@@ -85,6 +85,15 @@ public class AuthenticationResource implements SatisfiableRESTResource {
         return JSONResponse.createErrorResponse(Status.BAD_REQUEST, "Required field is missing.");
     }
 
+    @POST
+    @Path("/invalidateCookie")
+    @Produces({ MediaType.APPLICATION_JSON })
+    @ApiOperation(value = "Invalidate key Cookie")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") })
+    public Response invalidateCookie() {
+        return Response.ok().cookie(new NewCookie("key", "", "/", "", "", 0, false)).build();
+    }
+
     private boolean requriedFieldIsMissing(String username, String password) {
         return username == null || username.isEmpty() || password == null || password.isEmpty();
     }
