@@ -49,7 +49,7 @@ public class AuthenticationResource implements SatisfiableRESTResource {
         if (!requriedFieldIsMissing(username, password)) {
             UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(username, password);
             try {
-                JWTAuthenticationService.register(credentials);
+                JWTAuthenticationService.getInstance().register(credentials);
                 return Response.ok().build();
             } catch (AuthenticationException e) {
                 return JSONResponse.createErrorResponse(Status.UNAUTHORIZED, e.getMessage());
@@ -73,7 +73,7 @@ public class AuthenticationResource implements SatisfiableRESTResource {
         if (!requriedFieldIsMissing(username, password)) {
             UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(username, password);
             try {
-                String token = JWTAuthenticationService.getToken(credentials);
+                String token = JWTAuthenticationService.getInstance().getToken(credentials);
                 Map<String, String> json = new HashMap<String, String>();
                 json.put("key", token);
                 return Response.ok(json).cookie(new NewCookie("key", token, "/", "", "", 60 * 60 * 24 * 356, false))
