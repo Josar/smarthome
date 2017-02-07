@@ -27,11 +27,18 @@ public class JWTAuthenticationService {
 
     private static int KEY_LENGTH = 128;
 
-    private static byte[] key = initializeKey();
+    private static byte[] key;
 
     private static final String AUTHORIZATION_HEADER_PREFIX = "Bearer ";
 
-    private static byte[] initializeKey() {
+    private static JWTAuthenticationService instance;
+
+    private JWTAuthenticationService() {
+
+        key = initializeKey();
+    }
+
+    private byte[] initializeKey() {
 
         String[] array = { "smarthome", "distribution", "smarthome", "conf", "jwt_key.key" };
 
@@ -67,7 +74,7 @@ public class JWTAuthenticationService {
         }
     }
 
-    private static byte[] createKey(final File file) {
+    private byte[] createKey(final File file) {
 
         byte[] bytes = new byte[KEY_LENGTH];
 
@@ -91,11 +98,11 @@ public class JWTAuthenticationService {
         return bytes;
     }
 
-    public static void register(UsernamePasswordCredentials credentials) throws AuthenticationException {
+    public void register(UsernamePasswordCredentials credentials) throws AuthenticationException {
         ConfigurationFileHandler.register(credentials);
     }
 
-    public static String getToken(UsernamePasswordCredentials credentials) throws AuthenticationException {
+    public String getToken(UsernamePasswordCredentials credentials) throws AuthenticationException {
         UUID uuid = ConfigurationFileHandler.login(credentials);
         String base64Key = Base64.encodeBase64String(key);
         JwtBuilder builder = Jwts.builder();
@@ -105,7 +112,7 @@ public class JWTAuthenticationService {
         return compactJws;
     }
 
-    public static boolean authenticate(String authorizationHeader) {
+    public boolean authenticate(String authorizationHeader) {
         try {
             String token = authorizationHeader.replaceFirst(AUTHORIZATION_HEADER_PREFIX, "");
             String base64Key = Base64.encodeBase64String(key);
@@ -115,5 +122,13 @@ public class JWTAuthenticationService {
             // TODO Auto-generated catch block
             return false;
         }
+    }
+
+    public static JWTAuthenticationService getInstance() {
+        if (JWTAuthenticationService.instance == null) {
+            JWTAuthenticationService.instance = new JWTAuthenticationService();
+        }
+
+        return instance;
     }
 }
