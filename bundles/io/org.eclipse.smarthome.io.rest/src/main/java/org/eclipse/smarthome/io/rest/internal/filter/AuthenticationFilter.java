@@ -41,7 +41,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
                 List<String> authHeader = requestContext.getHeaders().get(AUTHORIZATION_HEADER);
                 if (authHeader != null && authHeader.size() > 0) {
                     String authToken = authHeader.get(0);
-                    if (!JWTAuthenticationService.authenticate(authToken)) {
+                    if (!JWTAuthenticationService.getInstance().authenticate(authToken)) {
                         abortWithUnauthorizedStatus(requestContext);
                     }
                 } else {
@@ -56,7 +56,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
                 .contains(SWAGGER_OVERVIEW_PATH_STRING);
         if (requestIsFromSwaggerOverview && requestContext.getCookies().containsKey("key")) {
             Cookie jwtCookie = requestContext.getCookies().get("key");
-            if (JWTAuthenticationService.authenticate(jwtCookie.getValue())) {
+            if (JWTAuthenticationService.getInstance().authenticate(jwtCookie.getValue())) {
                 return true;
             }
         }
