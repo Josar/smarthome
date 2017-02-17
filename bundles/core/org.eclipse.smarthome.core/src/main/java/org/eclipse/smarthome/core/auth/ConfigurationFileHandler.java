@@ -38,7 +38,7 @@ public class ConfigurationFileHandler {
      */
     public static void register(final UsernamePasswordCredentials credentials) {
 
-        final String username = credentials.getUsername();
+        final String username = credentials.getUsername().toLowerCase();
         final String hashed_password = BCrypt.hashpw(credentials.getPassword(), BCrypt.gensalt());
 
         if (usernameExists(username)) {
@@ -86,7 +86,7 @@ public class ConfigurationFileHandler {
      */
     public static UUID login(final UsernamePasswordCredentials credentials) {
 
-        final String username = credentials.getUsername();
+        final String username = credentials.getUsername().toLowerCase();
         final String password = credentials.getPassword();
 
         final String[] userData = searchCfgFile(username, USERNAME_LOCATION);
