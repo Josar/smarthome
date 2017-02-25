@@ -27,7 +27,7 @@ public class JWTAuthenticationService {
 
     private static int KEY_LENGTH = 128;
 
-    private static byte[] key;
+    private byte[] key;
 
     private static final String AUTHORIZATION_HEADER_PREFIX = "Bearer ";
 
@@ -99,11 +99,11 @@ public class JWTAuthenticationService {
     }
 
     public void register(UsernamePasswordCredentials credentials) throws AuthenticationException {
-        ConfigurationFileHandler.register(credentials);
+        ConfigurationFileHandler.getInstance().register(credentials);
     }
 
     public String getToken(UsernamePasswordCredentials credentials) throws AuthenticationException {
-        UUID uuid = ConfigurationFileHandler.login(credentials);
+        UUID uuid = ConfigurationFileHandler.getInstance().login(credentials);
         String base64Key = Base64.encodeBase64String(key);
         JwtBuilder builder = Jwts.builder();
         builder.setSubject(uuid.toString());
