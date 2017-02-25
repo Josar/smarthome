@@ -12,15 +12,9 @@ import javax.ws.rs.InternalServerErrorException;
 
 public class ConfigurationFileHandler {
 
-    private final static String CFG_FILE_PATH = initializeCFGFilePath();
+    private static ConfigurationFileHandler instance;
 
-    private static String initializeCFGFilePath() {
-
-        String[] array = { "smarthome", "distribution", "smarthome", "conf", "user.cfg" };
-
-        return PathTools.getPathFromFileComponents(array);
-
-    }
+    private String CFG_FILE_PATH;
 
     // e.g. 'user=password,username,uuid'
     private final static int PASSWORD_LOCATION = 0;
@@ -29,6 +23,18 @@ public class ConfigurationFileHandler {
     private final static String SEPERATOR_USER = "=";
     private final static String SEPERATOR_DATA = ",";
 
+    private ConfigurationFileHandler() {
+        CFG_FILE_PATH = initializeCFGFilePath();
+    }
+
+    private String initializeCFGFilePath() {
+
+        String[] array = { "smarthome", "distribution", "smarthome", "conf", "user.cfg" };
+
+        return PathTools.getPathFromFileComponents(array);
+
+    }
+
     /**
      * This method registers an user and persists the given data in the cfg-file.
      *
@@ -36,7 +42,7 @@ public class ConfigurationFileHandler {
      * @throws InternalServerErrorException if the cfg-file can't be read or written.
      * @throws AuthenticationException if the username is allready in use.
      */
-    public static void register(final UsernamePasswordCredentials credentials) {
+    public void register(final UsernamePasswordCredentials credentials) {
 
         final String username = credentials.getUsername().toLowerCase();
         final String hashed_password = BCrypt.hashpw(credentials.getPassword(), BCrypt.gensalt());
@@ -84,7 +90,7 @@ public class ConfigurationFileHandler {
      * @param credentials username and password for registration wrapped in UsernamePasswordCredentials.
      * @return unique uuid for the user.
      */
-    public static UUID login(final UsernamePasswordCredentials credentials) {
+    public UUID login(final UsernamePasswordCredentials credentials) {
 
         final String username = credentials.getUsername().toLowerCase();
         final String password = credentials.getPassword();
@@ -101,7 +107,7 @@ public class ConfigurationFileHandler {
         return UUID.fromString(userData[UUID_LOCATION]);
     }
 
-    public static String[] getUserDataByUUID(final UUID uuid) {
+    public String[] getUserDataByUUID(final UUID uuid) {
 
         return searchCfgFile(uuid.toString(), UUID_LOCATION);
     }
@@ -112,7 +118,7 @@ public class ConfigurationFileHandler {
      * @param username
      * @return true, if the username is allready defined in the cfg-file.
      */
-    private static boolean usernameExists(final String username) {
+    private boolean usernameExists(final String username) {
 
         return searchCfgFile(username, USERNAME_LOCATION) != null;
     }
@@ -123,7 +129,7 @@ public class ConfigurationFileHandler {
      * @param uuid
      * @return true, if the uuid is allready in use, false otherwise.
      */
-    private static boolean uuidExists(final UUID uuid) {
+    private boolean uuidExists(final UUID uuid) {
 
         return searchCfgFile(uuid.toString(), UUID_LOCATION) != null;
     }
@@ -136,7 +142,7 @@ public class ConfigurationFileHandler {
      * @param locationInString which position of the data in a cfg-file entry.
      * @return The users data extracted from the cfg-file and stored in an array.
      */
-    private static String[] searchCfgFile(final String substring, final int locationInString) {
+    private String[] searchCfgFile(final String substring, final int locationInString) {
 
         Scanner scanner = null;
 
@@ -168,7 +174,7 @@ public class ConfigurationFileHandler {
      *
      * @return Scanner for cfg-file.
      */
-    private static Scanner cfgFileScannerFactory() {
+    private Scanner cfgFileScannerFactory() {
 
         try {
             File userCfg = new File(CFG_FILE_PATH);
@@ -191,7 +197,7 @@ public class ConfigurationFileHandler {
      *
      * @return BufferedWriter for cfg-file.
      */
-    private static BufferedWriter cfgFileBufferedWriterFactory() {
+    private BufferedWriter cfgFileBufferedWriterFactory() {
 
         try {
             return new BufferedWriter(new FileWriter(CFG_FILE_PATH, true));
@@ -201,5 +207,13 @@ public class ConfigurationFileHandler {
 
             throw new InternalServerErrorException();
         }
+    }
+
+    public static ConfigurationFileHandler getInstance() {
+        if (ConfigurationFileHandler.instance == null) {
+            ConfigurationFileHandler.instance = new ConfigurationFileHandler();
+        }
+
+        return instance;
     }
 }
