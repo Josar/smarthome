@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="gencoap"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
+        xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
+
+    <!-- Generic CoAP Thing Type -->
+    <thing-type id="node">
+        <label>Generic CoAP Thing</label>
+        <description>Generic Thing for Beduino CoAP Binding</description>
+        
+        <config-description>
+            <parameter name="ipAddress" type="text">
+            </parameter>
+            <parameter name="portNumber" type="text">
+            </parameter>
+        </config-description>
+    </thing-type>
+
+</thing:thing-descriptions>

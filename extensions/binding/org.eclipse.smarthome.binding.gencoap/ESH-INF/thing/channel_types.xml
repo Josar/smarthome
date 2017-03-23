@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="gencoap"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
+    xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
+	
+	<!-- Switch Channel -->
+	<channel-type id="switch">
+	    <item-type>Switch</item-type>
+	    <label>Switch</label>
+	    <description>The switch channel allows to send on and off commands.</description>
+	    <category>Switch</category>
+	    
+	    <config-description>
+            <parameter name="path" type="text">
+                <label>path</label>
+                <description>The CoAP resource path for the switch</description>
+                <required>true</required>
+            </parameter>
+        </config-description>
+	</channel-type>
+	
+	<!-- Text Sensor Channel -->
+    <channel-type id="text-sensor">
+        <item-type>String</item-type>
+        <label>Textual Sensor</label>
+        <description>The text sensor channel allows to show textual sensor data.</description>
+        <category>Switch</category>
+        
+        <config-description>
+            <parameter name="path" type="text">
+                <label>path</label>
+                <description>The CoAP resource path for the sensor</description>
+                <required>true</required>
+            </parameter>
+        </config-description>
+    </channel-type>
+    
+    <!-- Color Channel -->
+    <channel-type id="color">
+        <item-type>Color</item-type>
+        <label>Color</label>
+        <description>The color channel allows to modify color values.</description>
+        <category>ColorLight</category>
+        
+        <config-description>
+            <parameter name="path" type="text">
+                <label>path</label>
+                <description>The CoAP resource path for the light</description>
+                <required>true</required>
+            </parameter>
+        </config-description>
+    </channel-type>
+    
+    <!-- Contact Channel -->
+    <channel-type id="contact">
+        <item-type>Contact</item-type>
+        <label>Contact</label>
+        <description>The contact channel allows to see the state of a contact sensor.</description>
+        <category>Contact</category>
+        
+        <config-description>
+            <parameter name="path" type="text">
+                <label>path</label>
+                <description>The CoAP resource path for the contact</description>
+                <required>true</required>
+            </parameter>
+        </config-description>
+    </channel-type>
+    
+    <!-- Percent Channel -->
+    <channel-type id="percent">
+        <item-type>Dimmer</item-type>
+        <label>Percent</label>
+        <description>The percent channel allows to modify the given percent endpoint (0-100%).</description>
+        <category>DimmableLight</category>
+        
+        <config-description>
+            <parameter name="path" type="text">
+                <label>path</label>
+                <description>The CoAP resource path for the endpoint</description>
+                <required>true</required>
+            </parameter>
+        </config-description>
+    </channel-type>
+    
+    <!-- Number Sensor Channel -->
+    <channel-type id="number-sensor">
+        <item-type>Number</item-type>
+        <label>Numeric Sensor</label>
+        <description>The numeric sensor channel allows to read numeric values.</description>
+        <category>Energy</category>
+        
+        <config-description>
+            <parameter name="path" type="text">
+                <label>path</label>
+                <description>The CoAP resource path for the light</description>
+                <required>true</required>
+            </parameter>
+        </config-description>
+    </channel-type>
+    
+    <!-- Trigger Channel -->
+    <channel-type id="rawbutton">
+        <item-type>Switch</item-type>
+        <kind>rawbutton</kind>
+        <label>Button</label>
+        <description>The Button channel allows to trigger PRESSED and RELEASED events</description>
+        <category>Switch</category>
+        
+        <config-description>
+            <parameter name="path" type="text">
+                <label>path</label>
+                <description>The CoAP resource path for the light</description>
+                <required>true</required>
+            </parameter>
+        </config-description>
+    </channel-type>
+	
+	
+</thing:thing-descriptions>
