@@ -1,26 +1,65 @@
 # JsonPath Transformation Service
 
-Extract an element of a JSON string using a [JsonPath expression](https://github.com/jayway/JsonPath#jayway-jsonpath).
+Transforms a JSON structure on basis of the [JsonPath](https://github.com/jayway/JsonPath#jayway-jsonpath) expression to an JSON containing the requested data.
+
+## Examples
+
+### Basic Example
+
+Given the JSON
+
+```
+[{ "device": { "location": "Outside", "status": { "temperature": 23.2 }}}]
+```
+
+the JsonPath expression `$.device.location` exstracts the JSON
+
+```
+[ "Outside" ]
+```
+
+the JsonPath expression `$.device.status.temperature` exstracts the JSON
+
+```
+[ 23.2 ]
+```
+
+### In Setup
+
+**Item**
+
+```csv
+String  Temperature_json "Temperature [JSONPATH($.device.status.temperature):%s °C]" {...}
+Number  Temperature "Temperature [%.1f °C]"
+```
+
+**Rule**
+
+```php
+rule "Convert JSON to Item Type Number"
+  when
+    Item Temperature_json changed
+ then
+    // use the transformation service to retrieve teh value
+    val newValue = transform("JSONPATH", ".$.device.status.temperature", Temperature_json.state.toString)
+
+    // post the new value to the Number Item
+    Temperature.postUpdate( newValue )
+ end
+```
+
+Now the resulting Number can also be used in the label to [change the color](https://docs.openhab.org/configuration/sitemaps.html#label-and-value-colors) or in a rule as value to compare.
+
+## Differences to standard JsonPath
 
 Returns `null` if the JsonPath expression could not be found.
+Compared to standard JSON the transformation returns evaluated values when a single alement is retrieved from the querry.
+Means it does not return valid JSON `[ 23.2 ]` but `23.2`, `[ "Outside" ]` but `Outside`.
+This makes it possible to use it in lables or output channel of things and get Numbers or strings instead of JSON arrays.
 
-// Small introduction of jsonpath
 // Todo list differences which are unique for the openhab implementation
 // returns evaluated elements not an array, Does not return a list when 
 
-// show valid transformation
-// Item label
-// Binding channel
-// rule
-
-## Example
-
-Given the JsonPath expression `$.device.status.temperature`:
-
-| input | output |
-|-------|--------|
-| `{ "device": { "status": { "temperature": 23.2 }}}` | `23.2` |
-
 ## Further Reading
-An extended (introduction)[https://www.w3schools.com/js/js_json_intro.asp] can be found at W3School.
-As JsonPath transformation is based on [Jayway](https://github.com/json-path/JsonPath) using a [online validator](https://jsonpath.herokuapp.com/) which also uses Jaway will give almost identical results. 
+An extended [introduction](https://www.w3schools.com/js/js_json_intro.asp) can be found at W3School.
+As JsonPath transformation is based on [Jayway](https://github.com/json-path/JsonPath) using a [online validator](https://jsonpath.herokuapp.com/) which also uses Jaway will give most similar results. 
