@@ -24,6 +24,7 @@ the JsonPath expression `$.device.status.temperature` exstracts the JSON
 [ 23.2 ]
 ```
 
+
 ### In Setup
 
 **Item**
