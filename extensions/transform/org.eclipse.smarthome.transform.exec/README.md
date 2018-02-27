@@ -11,7 +11,7 @@ The external program must either be in the executable search path of the server 
 
 ### General Setup
 
-**Item**
+**.items**
 
 This will replace the visible label in the UI with the transformation you apply with the command <TransformProgram>.
   
@@ -19,7 +19,7 @@ This will replace the visible label in the UI with the transformation you apply 
 String yourItem "Some info  [EXEC(/absolute/path/to/your/<TransformProgram> %s):%s]"
 ```
 
-**Rule**
+**.rules**
 
 ```java
 rule "Your Rule Name"
